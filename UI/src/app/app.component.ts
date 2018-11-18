@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import $ from 'jquery';
 
 @Component({
   selector: 'app-root',
@@ -9,31 +8,59 @@ import $ from 'jquery';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  private serverUrl = 'http://192.168.1.119:8888/socket'
-  private title = 'WebSockets chat';
-  private stompClient;
+  title = 'app';
 
-  constructor(){
-    this.initializeWebSocketConnection();
-  }
+  greetings: string[] = [];
+  showConversation: boolean = false;
+  ws: any;
+  name: string;
+  disabled: boolean;
 
-  initializeWebSocketConnection(){
-    let ws = new SockJS(this.serverUrl);
-    this.stompClient = Stomp.over(ws);
-    let that = this;
-    this.stompClient.connect({}, function(frame) {
-      that.stompClient.subscribe("/chat", (message) => {
-        if(message.body) {
-          $(".chat").append("<div class='message'>"+message.body+"</div>")
-          console.log(message.body);
-        }
+  constructor() {}
+
+  connect() {
+    // connect to stomp where stomp endpoint is exposed
+    // let ws = new SockJS(http://localhost:8080/greeting);
+    const socket = new WebSocket('ws://localhost:8080/greeting');
+    this.ws = Stomp.over(socket);
+    const that = this;
+    this.ws.connect({}, function(frame) {
+      that.ws.subscribe('/errors', function(message) {
+        alert('Error ' + message.body);
       });
+      that.ws.subscribe('/topic/reply', function(message) {
+        console.log(message);
+        that.showGreeting(message.body);
+      });
+      that.disabled = true;
+    }, function(error) {
+      alert('STOMP error ' + error);
     });
   }
 
-  sendMessage(message){
-    this.stompClient.send("/app/send/message" , {}, message);
-    $('#input').val('');
+  disconnect() {
+    if (this.ws != null) {
+      this.ws.ws.close();
+    }
+    this.setConnected(false);
+    console.log('Disconnected');
   }
 
+  sendName() {
+    const data = JSON.stringify({
+      'name' : this.name
+    });
+    this.ws.send('/app/message', {}, data);
+  }
+
+  showGreeting(message) {
+    this.showConversation = true;
+    this.greetings.push(message);
+  }
+
+  setConnected(connected) {
+    this.disabled = connected;
+    this.showConversation = connected;
+    this.greetings = [];
+  }
 }
