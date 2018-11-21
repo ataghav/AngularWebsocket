@@ -24,18 +24,22 @@ export class AppComponent {
     const socket = new WebSocket('ws://localhost:8080/greeting');
     this.ws = Stomp.over(socket);
     const that = this;
-    this.ws.connect({}, function(frame) {
-      that.ws.subscribe('/errors', function(message) {
-        alert('Error ' + message.body);
-      });
-      that.ws.subscribe('/topic/reply', function(message) {
-        console.log(message);
-        that.showGreeting(message.body);
-      });
-      that.disabled = true;
-    }, function(error) {
-      alert('STOMP error ' + error);
-    });
+    this.ws.connect(
+      {},
+      function(frame) {
+        that.ws.subscribe('/errors', function(message) {
+          alert('Error ' + message.body);
+        });
+        that.ws.subscribe('/topic/reply', function(message) {
+          console.log(message);
+          that.showGreeting(message.body);
+        });
+        that.disabled = true;
+      },
+      function(error) {
+        alert('STOMP error ' + error);
+      }
+    );
   }
 
   disconnect() {
@@ -48,9 +52,70 @@ export class AppComponent {
 
   sendName() {
     const data = JSON.stringify({
-      'name' : this.name
+      name: this.name
     });
+
+    // var message = JSON.stringify({
+    //   type: 'PLAYER_SELECTED',
+    //   user: 'user',
+    //   createdAt: new Date()
+    // });
+    
+    // var message = JSON.stringify({
+    //   type: 'SCORE_ADDED',
+    //   addedScores: [{ user: 'user', score: '10' }],
+    //   createdAt: new Date()
+    // });
+
     this.ws.send('/app/message', {}, data);
+  }
+
+  sayPlayerJoined() {
+    const message = JSON.stringify({
+      type: 'PLAYER_JOINED',
+      user: 'user',
+      createdAt: new Date()
+    });
+    this.ws.send('/app/message', {}, message);
+  }
+
+  sayPlayerLeft() {
+    const message = JSON.stringify({
+      type: 'PLAYER_LEFT',
+      user: 'user',
+      createdAt: new Date()
+    });
+    this.ws.send('/app/message', {}, message);
+  }
+
+  sayPlayerReady() {
+    const message = JSON.stringify({
+      type: 'PLAYER_READY',
+      user: 'user',
+      createdAt: new Date()
+    });
+    this.ws.send('/app/message', {}, message);
+  }
+
+  sayQuestionSubmited() {
+    const message = JSON.stringify({
+      type: 'QUESTION_SUBMITED',
+      user: 'user',
+      question: 'question',
+      options: ['opt1', 'opt2', 'opt3'],
+      createdAt: new Date()
+    });
+    this.ws.send('/app/message', {}, message);
+  }
+
+  sayAnswerSubmited() {
+    const message = JSON.stringify({
+      type: 'ANSWER_SUBMITED',
+      user: 'user',
+      answerIndex: 1,
+      createdAt: new Date()
+    });
+    this.ws.send('/app/message', {}, message);
   }
 
   showGreeting(message) {
