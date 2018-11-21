@@ -1,6 +1,8 @@
 package com.team.project.gameserver.dtos;
 
+import java.util.HashMap;
+
 public class State {
-//    User [] Users;
+    private HashMap<String, String> generalScores;
 
 }
