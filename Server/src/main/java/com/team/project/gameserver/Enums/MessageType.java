@@ -1,4 +1,4 @@
-package com.team.project.gameserver.models;
+package com.team.project.gameserver.Enums;
 
 public enum MessageType {
     PLAYER_JOINED,

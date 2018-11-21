@@ -1,15 +1,20 @@
 package com.team.project.gameserver.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Game {
     @Id
+    @GeneratedValue
     private Long Id;
     private Date startedAt;
     private Date finishedAt;
+
+    @OneToMany(mappedBy = "game")
+    private List<Round> rounds = new ArrayList<>();
 
     public Long getId() {
         return Id;
@@ -33,5 +38,13 @@ public class Game {
 
     public void setFinishedAt(Date finishedAt) {
         this.finishedAt = finishedAt;
+    }
+
+    public List<Round> getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(List<Round> rounds) {
+        this.rounds = rounds;
     }
 }

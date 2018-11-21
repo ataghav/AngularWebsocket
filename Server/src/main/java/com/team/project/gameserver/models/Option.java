@@ -1,15 +1,20 @@
 package com.team.project.gameserver.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Option {
     @Id
+    @GeneratedValue
     private Long id;
-//    private Question question;
+    private Long questionId;
     private String text;
     private Boolean isTrue;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_question")
+    private Question question;
 
     public Long getId() {
         return id;
@@ -19,13 +24,13 @@ public class Option {
         this.id = id;
     }
 
-//    public Question getQuestion() {
-//        return question;
-//    }
-//
-//    public void setQuestion(Question question) {
-//        this.question = question;
-//    }
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
+    }
 
     public String getText() {
         return text;
@@ -41,5 +46,13 @@ public class Option {
 
     public void setTrue(Boolean aTrue) {
         isTrue = aTrue;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 }

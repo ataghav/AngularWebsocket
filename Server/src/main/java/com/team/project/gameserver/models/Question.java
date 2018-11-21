@@ -1,15 +1,27 @@
 package com.team.project.gameserver.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
     @Id
+    @GeneratedValue
     private Long id;
-//    private Round round;
-//    private User user;
+    private Long roundId;
+    private Long creatorUserId;
     private String text;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question")
+    private List<Option> options = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_round")
+    private Round round;
 
     public Long getId() {
         return id;
@@ -19,21 +31,21 @@ public class Question {
         this.id = id;
     }
 
-//    public Round getRound() {
-//        return round;
-//    }
-//
-//    public void setRound(Round round) {
-//        this.round = round;
-//    }
+    public Long getRoundId() {
+        return roundId;
+    }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+    public void setRoundId(Long roundId) {
+        this.roundId = roundId;
+    }
+
+    public Long getCreatorUserId() {
+        return creatorUserId;
+    }
+
+    public void setCreatorUserId(Long creatorUserId) {
+        this.creatorUserId = creatorUserId;
+    }
 
     public String getText() {
         return text;
@@ -41,5 +53,29 @@ public class Question {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
+    }
+
+    public Round getRound() {
+        return round;
+    }
+
+    public void setRound(Round round) {
+        this.round = round;
     }
 }
