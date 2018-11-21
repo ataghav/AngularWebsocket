@@ -1,14 +1,12 @@
 package com.team.project.gameserver.dtos;
 
 import com.team.project.gameserver.Enums.MessageType;
-
-import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class SocketMessage {
-    private MessageType messageType;
+    private MessageType type;
     private String user;
     private Date createdAt;
     private String question;
@@ -17,11 +15,11 @@ public class SocketMessage {
     private HashMap<String, String> addedScores;
 
     public MessageType getMessageType() {
-        return messageType;
+        return type;
     }
 
     public void setMessageType(MessageType messageType) {
-        this.messageType = messageType;
+        this.type = messageType;
     }
 
     public String getUser() {
