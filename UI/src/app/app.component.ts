@@ -60,7 +60,7 @@ export class AppComponent {
     //   user: 'user',
     //   createdAt: new Date()
     // });
-    
+    //
     // var message = JSON.stringify({
     //   type: 'SCORE_ADDED',
     //   addedScores: [{ user: 'user', score: '10' }],
