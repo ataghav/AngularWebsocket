@@ -14,6 +14,7 @@ export interface Option {
 }
 
 export interface Question {
+
   text: string;
   options: Option[];
 }
