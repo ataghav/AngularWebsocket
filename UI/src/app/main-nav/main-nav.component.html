@@ -29,14 +29,17 @@
             <form class="game-form">
 
                 <mat-form-field class="full-width">
-                  <textarea matInput placeholder="Question" value="{{myQuestion.text}}"></textarea>
+                  <textarea matInput placeholder="Question" [value]="myQuestion.text"></textarea>
                 </mat-form-field>
 
                 <mat-form-field class="full-width" *ngFor="let option of myQuestion.options">
-                  <input matInput placeholder="Optional answer" value="{{option.text}}">
+                  <mat-checkbox suffix [checked]="option.isCorrect"></mat-checkbox>
+                  <input matInput placeholder="Optional answer" [value]="option.text">
+                  <br/>
                 </mat-form-field>
 
-                <button></button>
+
+                <button mat-button (click)="addNewOption()">Add Option</button>
               </form>
         </mat-grid-tile>
 

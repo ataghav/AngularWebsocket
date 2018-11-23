@@ -7,7 +7,8 @@ import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, Mat
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatGridListModule } from '@angular/material/grid-list';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {MatInputModule} from '@angular/material/input';
     MatIconModule,
     MatListModule,
     MatGridListModule,
-    MatInputModule
+    MatInputModule,
+    MatCheckboxModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

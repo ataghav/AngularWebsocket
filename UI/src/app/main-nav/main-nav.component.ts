@@ -43,13 +43,17 @@ export class MainNavComponent {
   myQuestion: Question = {
     text: '123',
     options: [
-      {text: 'he', isCorrect: false},
+      {text: 'he', isCorrect: true},
       {text: 'she', isCorrect: false}
     ]
   };
 
   addNewOption() {
-    
+    let myOption: Option = {
+      text: '',
+      isCorrect: false
+    };
+    this.myQuestion.options.push(myOption);
   }
 }
 
