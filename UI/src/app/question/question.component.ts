@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-export interface CreatedOption {
+export interface DraftOption {
   text: string;
   index: number;
   isCorrect: boolean;
 }
 
-export interface CreatedQuestion {
+export interface DraftQuestion {
   text: string;
-  options: CreatedOption[];
+  options: DraftOption[];
 }
 
 @Component({
@@ -17,7 +17,9 @@ export interface CreatedQuestion {
   styleUrls: ['./question.component.css']
 })
 export class QuestionComponent {
-  myQuestion: CreatedQuestion = {
+  optionsCounter: number = 1;
+
+  myQuestion: DraftQuestion = {
     text: '',
     options: [{
       text: '',
@@ -25,6 +27,24 @@ export class QuestionComponent {
       isCorrect: false
     }]
   };
+
+  addNewOption() {
+    this.optionsCounter++;
+    let newOption: DraftOption = {
+      text: '',
+      index: this.optionsCounter,
+      isCorrect: false
+    };
+    this.myQuestion.options.push(newOption);
+  }
+
+  removeOption(event: any) {
+    this.optionsCounter--;
+    // TODO: remove selected option
+    // TODO: reindex remaining options
+  }
+
+
 
   selectionChanged($event) {}
 

@@ -1,3 +1,8 @@
-<p>
-  players works!
-</p>
+<mat-list>
+    <mat-list-item *ngFor="let player of players">
+      <mat-icon matListIcon *ngIf="player.isReady">flag</mat-icon>
+      <mat-icon matListIcon *ngIf="!player.isReady">outlined_flag</mat-icon>
+      <mat-icon matListIcon >person</mat-icon>
+      <h3 matLine> {{player.name}} </h3>
+    </mat-list-item>
+  </mat-list>
