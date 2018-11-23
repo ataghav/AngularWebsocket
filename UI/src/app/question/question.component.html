@@ -1,0 +1,10 @@
+<div class="form-group">
+    <label for="question-text">Ask a question:</label>
+    <textarea name="" id="question-text" cols="30" rows="10">{{myQuestion.text}}</textarea>
+</div>
+
+<div class="form-group" *ngFor="let option of myQuestion.options">
+    <div class="radio">
+        <input type="radio" name="optradio" (change)="selectionChanged($event)" [value]="option.isCorrect"><input type="text" [value]="option.text">
+    </div>
+</div>

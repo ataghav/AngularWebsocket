@@ -1,8 +1,13 @@
-<app-main-nav></app-main-nav>
+<app-nav></app-nav>
+<ul>
+  <li><a routerLink="/home" class="logo">home</a></li>
+  <li><a routerLink="/question" class="logo">question</a></li>
+  <li><a routerLink="/answer" class="logo">answer</a></li>
+</ul>
 
 
 
-<!-- <div id="main-content" class="container">
+<div id="main-content" class="container">
   <div class="row">
     <div class="col-md-6">
       <form class="form-inline">
@@ -50,4 +55,11 @@
     </div>
   </div>
 
-</div> -->
+</div>
+
+
+
+<section>
+  <router-outlet></router-outlet>
+</section>
+

@@ -8,9 +8,9 @@ import * as SockJS from 'sockjs-client';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  title = 'game';
 
-  greetings: string[] = [];
+greetings: string[] = [];
   showConversation: boolean = false;
   ws: any;
   name: string;
