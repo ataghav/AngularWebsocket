@@ -10,7 +10,7 @@ import * as SockJS from 'sockjs-client';
 })
 export class AppComponent {
   title = 'game';
-  newplayer = 'BOBO';
+  localPlayer: string = 'TODO';
 
   history: string[] = [];
 
@@ -21,9 +21,9 @@ export class AppComponent {
   disabled: boolean;
 
   constructor(private interCommService: InterCommService) {
-    interCommService.playerJoined$.subscribe(player => {
-      this.history.push('${player} showed the update')
-    });
+    interCommService.answerSubmited$.subscribe(
+      answer => this.sayAnswerSubmited(answer)
+    );
   }
 
   connect() {
@@ -61,22 +61,14 @@ export class AppComponent {
             case 'QUESTION_SUBMITED':
               that.interCommService.handleQuestionSubmited(message.body);
               break;
-            case 'ANSWER_SUBMITED':
-              that.interCommService.handleAnswerSubmited(message.body);
-              break;
+            // case 'ANSWER_SUBMITED':
+            //   that.interCommService.handleAnswerSubmited(message.body);
+            //   break;
             case 'SCORE_ADDED':
               that.interCommService.handleScoreAdded(message.body);
               break;
           }
-
-
-
-
-
-
-
-
-          that.showGreeting(message.body);
+          // that.showGreeting(message.body);
         });
         that.disabled = true;
       },
@@ -114,10 +106,6 @@ export class AppComponent {
     this.ws.send('/app/message', {}, data);
   }
 
-  processIncomings(mesage: any) {
-
-  }
-
 
   sayPlayerJoined(user: string) {
     const message = JSON.stringify({
@@ -143,6 +131,7 @@ export class AppComponent {
       user: 'user',
       createdAt: new Date()
     });
+    console.log('I will say '+message);
     this.ws.send('/app/message', {}, message);
   }
 
@@ -157,23 +146,15 @@ export class AppComponent {
     this.ws.send('/app/message', {}, message);
   }
 
-  sayAnswerSubmited() {
+  sayAnswerSubmited(answer: string) {
     const message = JSON.stringify({
       type: 'ANSWER_SUBMITED',
-      user: 'user',
-      answerIndex: 1,
+      user: this.localPlayer,
+      answerIndex: answer,
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
   }
-
-  processPlayerJoined() {}
-  processPlayerLeft() {}
-  processPlayerReady() {}
-  processPlayerSelected() {}
-  processQuestionSubmited() {}
-  processAnswerSubmited() {}
-  processScoreAdded() {}
 
   showGreeting(message) {
     this.showConversation = true;

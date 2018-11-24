@@ -19,13 +19,13 @@ export interface ReceivedQuestion {
 })
 
 export class AnswerComponent implements OnDestroy {
-  @Input() newplayer: string;
+  @Input() newQuestion: string;
   selectedOption: number;
   subscription: Subscription;
 
-  justReceivedQuestion: ReceivedQuestion={
-    text:'',
-    options:[]
+  justReceivedQuestion: ReceivedQuestion = {
+    text: '',
+    options: []
   };
 
   constructor(private interCommService: InterCommService) {
@@ -44,6 +44,8 @@ export class AnswerComponent implements OnDestroy {
 
   submitAnswer() {
     console.log('the selected value is:' + this.selectedOption);
+
+    this.interCommService.handleAnswerSubmited(String(this.selectedOption));
   }
 
   ngOnDestroy() {
