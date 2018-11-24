@@ -1,8 +1,8 @@
-<mat-list>
-    <mat-list-item *ngFor="let player of players">
-      <mat-icon matListIcon *ngIf="player.isReady">flag</mat-icon>
-      <mat-icon matListIcon *ngIf="!player.isReady">outlined_flag</mat-icon>
-      <mat-icon matListIcon >person</mat-icon>
-      <h3 matLine> {{player.name}} </h3>
-    </mat-list-item>
-  </mat-list>
+<ul class="list-group" *ngFor="let player of players">
+  <li class="list-group-item">
+    <span *ngIf="player.isReady" class="glyphicon glyphicon-star "></span>
+    <span *ngIf="!player.isReady" class="glyphicon glyphicon-star-empty "></span>
+    <span class="glyphicon glyphicon-user "></span>
+    <span>{{player.name}} </span>
+  </li>
+</ul>

@@ -1,10 +1,14 @@
 <app-nav></app-nav>
+
 <ul>
-  <li><a routerLink="/home" class="logo">home</a></li>
-  <li><a routerLink="/question" class="logo">question</a></li>
   <li><a routerLink="/answer" class="logo">answer</a></li>
+  <li><a routerLink="/home" class="logo">home</a></li>
+  <li><a routerLink="/login" class="logo">login</a></li>
+  <li><a routerLink="/players" class="logo">players</a></li>
+  <li><a routerLink="/question" class="logo">question</a></li>
 </ul>
 
+<app-player [newplayer]="newplayer"></app-player>
 
 
 <div id="main-content" class="container">
@@ -33,11 +37,12 @@
     
   </div>
   <div class="row">
-    <button id="1" class="btn btn-success" type="button" (click)="sayPlayerLeft()">Player Left</button>
-    <button id="2" class="btn btn-success" type="button" (click)="sayPlayerReady()">Player Ready</button>
-    <button id="3" class="btn btn-success" type="button" (click)="sayQuestionSubmited()">Question Submited</button>
-    <button id="4" class="btn btn-success" type="button" (click)="sayAnswerSubmited()">Answer Submited</button>
-    <button id="5" class="btn btn-success" type="button" (click)="sayPlayerJoined()">Player Joined</button>
+    <button id="1" class="btn btn-success" type="button" (click)="sayPlayerJoined()">Player Joined</button>
+    <button id="2" class="btn btn-success" type="button" (click)="sayPlayerLeft()">Player Left</button>
+    <button id="3" class="btn btn-success" type="button" (click)="sayPlayerReady()">Player Ready</button>
+    <button id="4" class="btn btn-success" type="button" (click)="sayQuestionSubmited()">Question Submited</button>
+    <button id="5" class="btn btn-success" type="button" (click)="sayAnswerSubmited()">Answer Submited</button>
+    
   </div>
   <div class="row">
     <div class="col-md-12" *ngIf="showConversation">

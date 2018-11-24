@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { InterCommService } from './inter-comm.service';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 
@@ -9,16 +10,24 @@ import * as SockJS from 'sockjs-client';
 })
 export class AppComponent {
   title = 'game';
+  newplayer = 'BOBO';
 
-greetings: string[] = [];
+  history: string[] = [];
+
+  greetings: string[] = [];
   showConversation: boolean = false;
   ws: any;
   name: string;
   disabled: boolean;
 
-  constructor() {}
+  constructor(private interCommService: InterCommService) {
+    interCommService.playerJoined$.subscribe(player => {
+      this.history.push('${player} showed the update')
+    });
+  }
 
   connect() {
+    
     // connect to stomp where stomp endpoint is exposed
     // let ws = new SockJS(http://localhost:8080/greeting);
     const socket = new WebSocket('ws://localhost:8080/greeting');
@@ -31,7 +40,42 @@ greetings: string[] = [];
           alert('Error ' + message.body);
         });
         that.ws.subscribe('/topic/reply', function(message) {
-          console.log(message);
+          var parsedMessage = JSON.parse(message.body);
+          // console.log('NEW_MESSAGE_ARRIVED!!!');
+          // console.log(message);
+          let messageType = parsedMessage.type;
+          console.log(messageType);
+          switch(messageType){
+            case 'PLAYER_JOINED':
+              that.interCommService.handlePlayerJoined(message.body);
+              break;
+            case 'PLAYER_LEFT':
+              that.interCommService.handlePlayerLeft(message.body);
+              break;
+            case 'PLAYER_READY':
+              that.interCommService.handlePlayerReady(message);
+              break;
+            case 'PLAYER_SELECTED':
+              that.interCommService.handlePlayerSelected(message);
+              break;
+            case 'QUESTION_SUBMITED':
+              that.interCommService.handleQuestionSubmited(message);
+              break;
+            case 'ANSWER_SUBMITED':
+              that.interCommService.handleAnswerSubmited(message);
+              break;
+            case 'SCORE_ADDED':
+              that.interCommService.handleScoreAdded(message);
+              break;
+          }
+
+
+
+
+
+
+
+
           that.showGreeting(message.body);
         });
         that.disabled = true;
@@ -60,7 +104,7 @@ greetings: string[] = [];
     //   user: 'user',
     //   createdAt: new Date()
     // });
-    //
+    
     // var message = JSON.stringify({
     //   type: 'SCORE_ADDED',
     //   addedScores: [{ user: 'user', score: '10' }],
@@ -70,7 +114,12 @@ greetings: string[] = [];
     this.ws.send('/app/message', {}, data);
   }
 
-  sayPlayerJoined() {
+  processIncomings(mesage: any) {
+
+  }
+
+
+  sayPlayerJoined(user: string) {
     const message = JSON.stringify({
       type: 'PLAYER_JOINED',
       user: 'user',
@@ -79,7 +128,7 @@ greetings: string[] = [];
     this.ws.send('/app/message', {}, message);
   }
 
-  sayPlayerLeft() {
+  sayPlayerLeft(user: string) {
     const message = JSON.stringify({
       type: 'PLAYER_LEFT',
       user: 'user',
@@ -117,6 +166,14 @@ greetings: string[] = [];
     });
     this.ws.send('/app/message', {}, message);
   }
+
+  processPlayerJoined() {}
+  processPlayerLeft() {}
+  processPlayerReady() {}
+  processPlayerSelected() {}
+  processQuestionSubmited() {}
+  processAnswerSubmited() {}
+  processScoreAdded() {}
 
   showGreeting(message) {
     this.showConversation = true;

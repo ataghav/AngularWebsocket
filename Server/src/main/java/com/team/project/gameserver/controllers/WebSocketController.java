@@ -19,8 +19,9 @@ public class WebSocketController {
     @MessageMapping("/message")
     @SendTo("/topic/reply")
     public String processMessageFromClient(@Payload String message) throws Exception {
-        String name = new Gson().fromJson(message, Map.class).get("name").toString();
-        return name;
+//        String name = new Gson().fromJson(message, Map.class).get("name").toString();
+//        return name;
+        return message;
     }
 
     @MessageExceptionHandler
