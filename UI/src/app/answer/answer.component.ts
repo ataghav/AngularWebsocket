@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { InterCommService } from '../inter-comm.service';
+import { Subscription } from 'rxjs';
 
-export interface ReceivedOption {
-  text: string;
-  index: number;
-}
+// export interface ReceivedOption {
+//   text: string;
+//   index: number;
+// }
 
 export interface ReceivedQuestion {
   text: string;
-  options: ReceivedOption[];
+  options: string[];
 }
 
 @Component({
@@ -16,11 +18,28 @@ export interface ReceivedQuestion {
   styleUrls: ['./answer.component.css']
 })
 
-export class AnswerComponent {
+export class AnswerComponent implements OnDestroy {
+  @Input() newplayer: string;
   selectedOption: number;
+  subscription: Subscription;
+
+  justReceivedQuestion: ReceivedQuestion;
+
+  constructor(private interCommService: InterCommService) {
+    this.subscription = interCommService.questionSubmited$.subscribe(
+      message => {
+        // this.message = message;
+        // console.log('I am player and I have Got your message!!!!');
+        // console.log(message);
+        var parsedMessage = JSON.parse(message);
+        console.log(parsedMessage.options);
+        this.justReceivedQuestion.text = parsedMessage.question;
+        this.justReceivedQuestion.options = parsedMessage.options;
+      });
+  }
 
   // TODO: load question dynamically
-  justReceivedQuestion: ReceivedQuestion = {
+  justReceivedQuestion = {
     text: 'Is this a sample questoin text?',
     options: [
       { text: 'option1', index: 1},
@@ -35,5 +54,10 @@ export class AnswerComponent {
 
   submitAnswer() {
     console.log('the selected value is:' + this.selectedOption);
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.subscription.unsubscribe();
   }
 }

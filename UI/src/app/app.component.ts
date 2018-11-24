@@ -53,19 +53,19 @@ export class AppComponent {
               that.interCommService.handlePlayerLeft(message.body);
               break;
             case 'PLAYER_READY':
-              that.interCommService.handlePlayerReady(message);
+              that.interCommService.handlePlayerReady(message.body);
               break;
             case 'PLAYER_SELECTED':
-              that.interCommService.handlePlayerSelected(message);
+              that.interCommService.handlePlayerSelected(message.body);
               break;
             case 'QUESTION_SUBMITED':
-              that.interCommService.handleQuestionSubmited(message);
+              that.interCommService.handleQuestionSubmited(message.body);
               break;
             case 'ANSWER_SUBMITED':
-              that.interCommService.handleAnswerSubmited(message);
+              that.interCommService.handleAnswerSubmited(message.body);
               break;
             case 'SCORE_ADDED':
-              that.interCommService.handleScoreAdded(message);
+              that.interCommService.handleScoreAdded(message.body);
               break;
           }
 

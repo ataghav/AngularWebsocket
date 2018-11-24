@@ -6,9 +6,9 @@
                 <textarea name="" id="question-text" cols="30" rows="2">{{justReceivedQuestion.text}}</textarea>
             </div>
 
-            <div class="form-group" *ngFor="let option of justReceivedQuestion.options">
+            <div class="form-group" *ngFor="let option of justReceivedQuestion.options; index as i">
                 <div class="radio">
-                    <label><input type="radio" name="optradio" (change)="selectionChanged($event)" [value]="option.index">{{option.text}}</label>
+                    <label><input type="radio" name="optradio" (change)="selectionChanged($event)" [value]="i">{{option}}</label>
                 </div>
             </div>
             <button type="button" class="btn btn-primary" (click)="submitAnswer()">Submit</button>
