@@ -24,10 +24,17 @@ export class AppComponent {
     interCommService.answerSubmited$.subscribe(
       answer => this.sayAnswerSubmited(answer)
     );
+
+    interCommService.questionSubmited$.subscribe(
+      question => {
+        console.log('AGAIN GOOD');
+        this.sayQuestionSubmited(question);
+      }
+    );
   }
 
   connect() {
-    
+
     // connect to stomp where stomp endpoint is exposed
     // let ws = new SockJS(http://localhost:8080/greeting);
     const socket = new WebSocket('ws://localhost:8080/greeting');
@@ -35,17 +42,18 @@ export class AppComponent {
     const that = this;
     this.ws.connect(
       {},
-      function(frame) {
-        that.ws.subscribe('/errors', function(message) {
+      function (frame) {
+        that.ws.subscribe('/errors', function (message) {
           alert('Error ' + message.body);
         });
-        that.ws.subscribe('/topic/reply', function(message) {
+        that.ws.subscribe('/topic/reply', function (message) {
           var parsedMessage = JSON.parse(message.body);
           // console.log('NEW_MESSAGE_ARRIVED!!!');
           // console.log(message);
           let messageType = parsedMessage.type;
+          let user = parsedMessage.user;
           console.log(messageType);
-          switch(messageType){
+          switch (messageType) {
             case 'PLAYER_JOINED':
               that.interCommService.handlePlayerJoined(message.body);
               break;
@@ -56,9 +64,13 @@ export class AppComponent {
               that.interCommService.handlePlayerReady(message.body);
               break;
             case 'PLAYER_SELECTED':
+              if (user = that.localPlayer){
+                // go to question view. else wait.
+              }
               that.interCommService.handlePlayerSelected(message.body);
               break;
             case 'QUESTION_SUBMITED':
+              if (user = that.localPlayer) break;
               that.interCommService.handleQuestionSubmited(message.body);
               break;
             // case 'ANSWER_SUBMITED':
@@ -72,7 +84,7 @@ export class AppComponent {
         });
         that.disabled = true;
       },
-      function(error) {
+      function (error) {
         alert('STOMP error ' + error);
       }
     );
@@ -96,7 +108,7 @@ export class AppComponent {
     //   user: 'user',
     //   createdAt: new Date()
     // });
-    
+
     // var message = JSON.stringify({
     //   type: 'SCORE_ADDED',
     //   addedScores: [{ user: 'user', score: '10' }],
@@ -131,16 +143,17 @@ export class AppComponent {
       user: 'user',
       createdAt: new Date()
     });
-    console.log('I will say '+message);
+    console.log('I will say ' + message);
     this.ws.send('/app/message', {}, message);
   }
 
-  sayQuestionSubmited() {
+  sayQuestionSubmited(question: any) {
+    console.log('QUESTION IS '+question);
     const message = JSON.stringify({
       type: 'QUESTION_SUBMITED',
-      user: 'user',
-      question: 'question',
-      options: ['opt1', 'opt2', 'opt3'],
+      user: this.localPlayer,
+      question: question.text,
+      options: question.options,
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
