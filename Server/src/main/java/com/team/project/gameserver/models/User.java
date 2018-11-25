@@ -12,7 +12,7 @@ public class User {
     private String givenName;
     private String SurName;
     private String userName;
-    private String pass;
+    private String passWord;
     private Boolean isAskingQuestion;
     private Integer score;
 
@@ -48,12 +48,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPassWord() {
+        return passWord;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 
     public Boolean getAskingQuestion() {
