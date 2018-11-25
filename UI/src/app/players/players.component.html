@@ -1,8 +1,8 @@
 <ul class="list-group" *ngFor="let player of players">
   <li class="list-group-item">
-    <span *ngIf="player.isReady" class="glyphicon glyphicon-star "></span>
-    <span *ngIf="!player.isReady" class="glyphicon glyphicon-star-empty "></span>
-    <span class="glyphicon glyphicon-user "></span>
+    <span class="icon" *ngIf="player.isReady" class="glyphicon glyphicon-star"></span>
+    <span class="icon" *ngIf="!player.isReady" class="glyphicon glyphicon-star-empty"></span>
+    <span class="icon" class="glyphicon glyphicon-user "></span>
     <span>{{player.name}} </span>
   </li>
 </ul>

@@ -2,7 +2,7 @@
     <label for="question-text">Ask a question:</label>
     <textarea name="" id="question-text" cols="30" rows="2" [(ngModel)]="myQuestion.text"></textarea>
 </div>
-
+<button type="button" class="btn btn-primary" (click)="addNewOption()"><span class="glyphicon glyphicon-plus"></span></button>
 <div class="form-group" *ngFor="let option of myQuestion.options; let i = index; trackBy:trackByFn;">
     <div class="radio">
         <input type="radio" name="optradio" (change)="selectionChanged($event)" [value]="i">
@@ -12,6 +12,6 @@
         </button>
     </div>
 </div>
-<button type="button" class="btn btn-primary round-button" (click)="addNewOption()"><span class="glyphicon glyphicon-plus"></span></button>
+
 <br/>
 <button type="button" class="btn btn-primary" (click)="submitQuestion()">Submit</button>
