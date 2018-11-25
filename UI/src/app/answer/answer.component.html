@@ -1,7 +1,7 @@
 <div class="row">
     <div class="form-group">
         <label for="question-text">Answer this question:</label>
-        <p name="" id="question-text" cols="30" rows="2">{{justReceivedQuestion.text}}</p>
+        <label name="" id="question-text" cols="30" rows="2">{{justReceivedQuestion.text}}</label>
     </div>
     <div class="form-group" *ngFor="let option of justReceivedQuestion.options; index as i">
         <div class="radio">

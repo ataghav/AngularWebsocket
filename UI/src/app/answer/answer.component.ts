@@ -31,7 +31,7 @@ export class AnswerComponent implements OnDestroy {
   constructor(private interCommService: InterCommService) {
     this.subscription = interCommService.questionSubmited$.subscribe(
       message => {
-        var parsedMessage = JSON.parse(message);
+        const parsedMessage = JSON.parse(message);
         console.log(parsedMessage.options);
         this.justReceivedQuestion.text = parsedMessage.question;
         this.justReceivedQuestion.options = parsedMessage.options;

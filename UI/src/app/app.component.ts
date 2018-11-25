@@ -3,6 +3,13 @@ import { InterCommService } from './inter-comm.service';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 
+export interface Question {
+  type: string;
+  user: string;
+  text: string;
+  options: string[];
+  createdAt: Date;
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -27,8 +34,8 @@ export class AppComponent {
 
     interCommService.questionSubmited$.subscribe(
       question => {
-        console.log('AGAIN GOOD');
-        this.sayQuestionSubmited(question);
+        console.log('[INFO] submitQuestion is hited in: ' + this);
+        this.sayQuestionSubmited(JSON.parse(question));
       }
     );
   }
@@ -47,10 +54,10 @@ export class AppComponent {
           alert('Error ' + message.body);
         });
         that.ws.subscribe('/topic/reply', function (message) {
-          var parsedMessage = JSON.parse(message.body);
+          const parsedMessage = JSON.parse(message.body);
           // console.log('NEW_MESSAGE_ARRIVED!!!');
           // console.log(message);
-          let messageType = parsedMessage.type;
+          const messageType = parsedMessage.type;
           let user = parsedMessage.user;
           console.log(messageType);
           switch (messageType) {
@@ -64,13 +71,17 @@ export class AppComponent {
               that.interCommService.handlePlayerReady(message.body);
               break;
             case 'PLAYER_SELECTED':
-              if (user = that.localPlayer){
+              if (user = that.localPlayer) {
                 // go to question view. else wait.
               }
               that.interCommService.handlePlayerSelected(message.body);
               break;
             case 'QUESTION_SUBMITED':
-              if (user = that.localPlayer) break;
+              if (user = that.localPlayer) {
+                console.log('QUESTION IS MINE');
+                break;
+              }
+              console.log('QUESTION IS NOT MINE');
               that.interCommService.handleQuestionSubmited(message.body);
               break;
             // case 'ANSWER_SUBMITED':
@@ -147,15 +158,16 @@ export class AppComponent {
     this.ws.send('/app/message', {}, message);
   }
 
-  sayQuestionSubmited(question: any) {
-    console.log('QUESTION IS '+question);
+  sayQuestionSubmited(question: Question) {
+    console.log('[INFO] sayQuestionSubmited is hited' + this);
     const message = JSON.stringify({
       type: 'QUESTION_SUBMITED',
       user: this.localPlayer,
-      question: question.text,
+      text: question.text,
       options: question.options,
       createdAt: new Date()
     });
+    console.log('THIS IS THE FINAL FORM OF QUESTION TO SEND' + message);
     this.ws.send('/app/message', {}, message);
   }
 

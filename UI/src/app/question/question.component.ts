@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 export interface DraftQuestion {
   text: string;
   options: string[];
-  answerIndex: string
+  answerIndex: string;
 }
 
 @Component({
@@ -19,15 +19,16 @@ export interface DraftQuestion {
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css']
 })
+
 export class QuestionComponent implements OnDestroy {
   subscription: Subscription;
 
   constructor(private interCommService: InterCommService) { }
 
   myQuestion: DraftQuestion = {
-    text: '',
-    options: [''],
-    answerIndex: ''
+    text: 'my text',
+    options: ['opt1', 'opt2'],
+    answerIndex: '1'
   };
 
   addNewOption() {
@@ -53,8 +54,12 @@ export class QuestionComponent implements OnDestroy {
   }
 
   submitQuestion() {
-    console.log('SO FAR SO GOOD');
-    this.interCommService.handleQuestionSubmited(String(this.myQuestion));
+    console.log('[INFO] submitQuestion is hited. myQuestion is: ' + JSON.stringify(this.myQuestion));
+    this.interCommService.handleQuestionSubmited(JSON.stringify(this.myQuestion));
+  }
+
+  trackByFn(index: any, item: any) {
+    return index;
   }
 
   ngOnDestroy() {
