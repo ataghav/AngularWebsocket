@@ -1,8 +1,9 @@
 <div class="row">
     <div class="form-group">
         <label for="question-text">Answer this question:</label>
-        <label name="" id="question-text" cols="30" rows="2">{{justReceivedQuestion.text}}</label>
+        <span name="" id="question-text">{{justReceivedQuestion.text}}</span>
     </div>
+    <br/>
     <div class="form-group" *ngFor="let option of justReceivedQuestion.options; index as i">
         <div class="radio">
             <label><input type="radio" name="optradio" (change)="selectionChanged($event)" [value]="i">{{option}}</label>

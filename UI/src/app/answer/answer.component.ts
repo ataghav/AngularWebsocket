@@ -24,7 +24,7 @@ export class AnswerComponent implements OnDestroy {
   subscription: Subscription;
 
   justReceivedQuestion: ReceivedQuestion = {
-    text: '',
+    text: 'ww',
     options: []
   };
 
@@ -33,7 +33,7 @@ export class AnswerComponent implements OnDestroy {
       message => {
         const parsedMessage = JSON.parse(message);
         console.log(parsedMessage.options);
-        this.justReceivedQuestion.text = parsedMessage.question;
+        this.justReceivedQuestion.text = parsedMessage.text;
         this.justReceivedQuestion.options = parsedMessage.options;
       });
   }
