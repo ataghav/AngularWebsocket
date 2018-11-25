@@ -3,11 +3,16 @@
         <label for="question-text">Answer this question:</label>
         <span name="" id="question-text">{{justReceivedQuestion.text}}</span>
     </div>
-    <br/>
+</div>
+<div class="row">
+    <br />
     <div class="form-group" *ngFor="let option of justReceivedQuestion.options; index as i">
         <div class="radio">
             <label><input type="radio" name="optradio" (change)="selectionChanged($event)" [value]="i">{{option}}</label>
         </div>
     </div>
+
+</div>
+<div class="row">
     <button type="button" class="btn btn-primary" (click)="submitAnswer()">Submit</button>
 </div>

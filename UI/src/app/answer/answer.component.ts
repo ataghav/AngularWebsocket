@@ -24,8 +24,8 @@ export class AnswerComponent implements OnDestroy {
   subscription: Subscription;
 
   justReceivedQuestion: ReceivedQuestion = {
-    text: 'ww',
-    options: []
+    text: 'test question',
+    options: ['test answer1', 'test answer2']
   };
 
   constructor(private interCommService: InterCommService) {
