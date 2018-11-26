@@ -16,7 +16,7 @@ export class PlayersComponent implements OnDestroy {
   @Input() newplayer: string;
   message = '';
   subscription: Subscription;
-  
+
 
   constructor(private interCommService: InterCommService) {
     this.subscription = interCommService.playerJoined$.subscribe(
@@ -41,6 +41,18 @@ export class PlayersComponent implements OnDestroy {
         this.players.forEach(function (player, index) {
           if (player.name == parsedMessage.user) {
             that.players.splice(index, 1);
+          }
+        });
+      });
+
+    this.subscription = interCommService.playerReady$.subscribe(
+      message => {
+        this.message = message;
+        var parsedMessage = JSON.parse(message);
+        let that = this;
+        this.players.forEach(function (player, index) {
+          if (player.name == parsedMessage.user) {
+            player.isReady = true;
           }
         });
       });

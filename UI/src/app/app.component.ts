@@ -17,7 +17,8 @@ export interface Question {
 })
 export class AppComponent {
   title = 'game';
-  localPlayer: string = 'TODO';
+  localPlayer: string;
+  isJoined: boolean = false;
 
   history: string[] = [];
 
@@ -55,8 +56,8 @@ export class AppComponent {
         });
         that.ws.subscribe('/topic/reply', function (message) {
           const parsedMessage = JSON.parse(message.body);
-          // console.log('NEW_MESSAGE_ARRIVED!!!');
-          // console.log(message);
+          console.log('NEW_MESSAGE_ARRIVED!!!');
+          console.log(message);
           const messageType = parsedMessage.type;
           let user = parsedMessage.user;
           console.log(messageType);
@@ -71,6 +72,7 @@ export class AppComponent {
               that.interCommService.handlePlayerReady(message.body);
               break;
             case 'PLAYER_SELECTED':
+              console.log('PLAYER_SELECTED has been received');
               if (user = that.localPlayer) {
                 // go to question view. else wait.
               }
@@ -131,18 +133,23 @@ export class AppComponent {
 
 
   sayPlayerJoined(user: string) {
+    if(this.isJoined){
+      return;
+    }
     const message = JSON.stringify({
       type: 'PLAYER_JOINED',
-      user: 'user',
+      // user: 'user' + Math.floor(Math.random()*10) + 1,
+      user: this.localPlayer,
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
   }
 
   sayPlayerLeft(user: string) {
+    this.isJoined=false;
     const message = JSON.stringify({
       type: 'PLAYER_LEFT',
-      user: 'user',
+      user: this.localPlayer,
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
@@ -151,7 +158,7 @@ export class AppComponent {
   sayPlayerReady() {
     const message = JSON.stringify({
       type: 'PLAYER_READY',
-      user: 'user',
+      user: this.localPlayer,
       createdAt: new Date()
     });
     console.log('I will say ' + message);
