@@ -56,11 +56,11 @@ export class AppComponent {
         });
         that.ws.subscribe('/topic/reply', function (message) {
           const parsedMessage = JSON.parse(message.body);
-          console.log('NEW_MESSAGE_ARRIVED!!!');
-          console.log(message);
+          // console.log('NEW_MESSAGE_ARRIVED!!!');
+          // console.log(message);
           const messageType = parsedMessage.type;
           let user = parsedMessage.user;
-          console.log(messageType);
+          // console.log(messageType);
           switch (messageType) {
             case 'PLAYER_JOINED':
               that.interCommService.handlePlayerJoined(message.body);
@@ -72,18 +72,19 @@ export class AppComponent {
               that.interCommService.handlePlayerReady(message.body);
               break;
             case 'PLAYER_SELECTED':
-              console.log('PLAYER_SELECTED has been received');
-              if (user = that.localPlayer) {
-                // go to question view. else wait.
+              // console.log('PLAYER_SELECTED has been received');
+              if (user == that.localPlayer) {
+                // TODO: go to question view. else wait.
+                that.interCommService.handlePlayerSelected(message.body);
               }
-              that.interCommService.handlePlayerSelected(message.body);
+              
               break;
             case 'QUESTION_SUBMITED':
-              if (user = that.localPlayer) {
-                console.log('QUESTION IS MINE');
-                break;
-              }
-              console.log('QUESTION IS NOT MINE');
+              // if (user = that.localPlayer) {
+              //   console.log('QUESTION IS MINE');
+              //   break;
+              // }
+              // console.log('QUESTION IS NOT MINE');
               that.interCommService.handleQuestionSubmited(message.body);
               break;
             // case 'ANSWER_SUBMITED':

@@ -23,7 +23,14 @@ export interface DraftQuestion {
 export class QuestionComponent implements OnDestroy {
   subscription: Subscription;
 
-  constructor(private interCommService: InterCommService) { }
+  constructor(private interCommService: InterCommService) { 
+    this.subscription = interCommService.playerSelected$.subscribe(
+      message => {
+        const parsedMessage = JSON.parse(message);
+        // console.log(parsedMessage.options);
+        this.myQuestion.text='TADA!!!';
+      });
+  }
 
   myQuestion: DraftQuestion = {
     text: 'my text',
