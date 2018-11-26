@@ -9,10 +9,17 @@ public class SocketMessage {
     private MessageType type;
     private String user;
     private Date createdAt;
-    private String question;
+    private String text;
     private List<String> options;
     private Integer answerIndex;
     private HashMap<String, String> addedScores;
+
+    public static SocketMessage playerSelectedMessage(String user){
+        SocketMessage nsm = new SocketMessage();
+        nsm.setMessageType(MessageType.PLAYER_SELECTED);
+        nsm.setUser(user);
+        return nsm;
+    }
 
     public MessageType getMessageType() {
         return type;
@@ -38,12 +45,12 @@ public class SocketMessage {
         this.createdAt = createdAt;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getText() {
+        return text;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public List<String> getOptions() {

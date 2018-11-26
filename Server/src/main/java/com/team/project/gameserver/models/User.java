@@ -13,8 +13,22 @@ public class User {
     private String SurName;
     private String userName;
     private String passWord;
-    private Boolean isAskingQuestion;
+    private Boolean isReady;
+//    private Boolean isAskingQuestion;
+    private Boolean hasAskedFlag;
     private Integer score;
+
+    public User() {
+        this.isReady = false;
+        this.hasAskedFlag = false;
+    }
+
+    public User(String userName) {
+        this.userName = userName;
+        this.isReady = false;
+        this.hasAskedFlag = false;
+    }
+
 
     public Long getId() {
         return id;
@@ -56,12 +70,28 @@ public class User {
         this.passWord = passWord;
     }
 
-    public Boolean getAskingQuestion() {
-        return isAskingQuestion;
+    public Boolean getReady() {
+        return isReady;
     }
 
-    public void setAskingQuestion(Boolean askingQuestion) {
-        isAskingQuestion = askingQuestion;
+    public void setReady(Boolean ready) {
+        isReady = ready;
+    }
+
+//    public Boolean getAskingQuestion() {
+//        return isAskingQuestion;
+//    }
+//
+//    public void setAskingQuestion(Boolean askingQuestion) {
+//        isAskingQuestion = askingQuestion;
+//    }
+
+    public Boolean getHasAskedFlag() {
+        return hasAskedFlag;
+    }
+
+    public void setHasAskedFlag(Boolean hasAskedFlag) {
+        this.hasAskedFlag = hasAskedFlag;
     }
 
     public Integer getScore() {

@@ -6,6 +6,6 @@ public enum MessageType {
     PLAYER_READY,
     PLAYER_SELECTED,
     QUESTION_SUBMITED,
-    ANSWER_SUBMITED,
+    ANSWER_SUBMITTED,
     SCORE_ADDED
 }

@@ -1,3 +1,4 @@
+/*
 package com.team.project.gameserver.configuration;
 
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("user")
-                .password("password")
-                .roles("USER");
+//        auth
+//                .inMemoryAuthentication()
+//                .withUser("user")
+//                .password("password")
+//                .roles("USER");
     }
 
     @Override
@@ -31,3 +32,4 @@ public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic();
     }
 }
+*/
