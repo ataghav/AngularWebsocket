@@ -10,3 +10,9 @@
     margin: 4px 2px;
     border-radius: 50%;
 }
+
+.btn-icon{
+    height: 25px;
+    width: 25px;
+    padding: 0px;
+}

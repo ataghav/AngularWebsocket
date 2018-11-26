@@ -48,8 +48,10 @@ export class QuestionComponent implements OnDestroy {
     this.myQuestion.options.push('');
   }
 
-  removeOption(event: any) {
+  removeOption($event) {
     // this.optionsCounter--;
+    console.log((<HTMLSpanElement>event.target).id);
+    this.myQuestion.options.splice(Number((<HTMLSpanElement>event.target).id),1);
     // TODO: remove selected option
     // TODO: reindex remaining options
   }

@@ -2,13 +2,13 @@
     <label for="question-text">Ask a question:</label>
     <textarea name="" id="question-text" cols="30" rows="2" [(ngModel)]="myQuestion.text"></textarea>
 </div>
-<button type="button" class="btn btn-primary" (click)="addNewOption()"><span class="glyphicon glyphicon-plus"></span></button>
+<button type="button" class="btn btn-icon" (click)="addNewOption()"><span class="glyphicon glyphicon-plus"></span></button>
 <div class="form-group" *ngFor="let option of myQuestion.options; let i = index; trackBy:trackByFn;">
     <div class="radio">
         <input type="radio" name="optradio" (change)="selectionChanged($event)" [value]="i">
         <input type="text" [(ngModel)]="myQuestion.options[i]" required>
-        <button type="button" class="btn btn-danger" (click)="removeOption($event)">
-            <span class="glyphicon glyphicon-trash"></span>
+        <button type="button" class="btn btn-icon" (click)="removeOption($event)">
+            <span class="glyphicon glyphicon-trash" [id]="i"></span>
         </button>
     </div>
 </div>
