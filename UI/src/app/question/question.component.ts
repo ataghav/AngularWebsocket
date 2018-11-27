@@ -64,7 +64,7 @@ export class QuestionComponent implements OnDestroy {
 
   submitQuestion() {
     console.log('[INFO] submitQuestion is hited. myQuestion is: ' + JSON.stringify(this.myQuestion));
-    this.interCommService.handleQuestionSubmited(JSON.stringify(this.myQuestion));
+    this.interCommService.handleInternalSubmitQuestion(JSON.stringify(this.myQuestion));
   }
 
   trackByFn(index: any, item: any) {

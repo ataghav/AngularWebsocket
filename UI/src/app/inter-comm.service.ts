@@ -15,12 +15,9 @@ export class InterCommService {
   private answerSubmitedSource = new Subject<string>();
   private scoreAddedSource = new Subject<string>();
 
-  // private missionAnnouncedSource = new Subject<string>();
-  // private missionConfirmedSource = new Subject<string>();
+  private internalSubmitQuestionSource = new Subject<string>();
 
   // Observable string streams
-  // missionAnnounced$ = this.missionAnnouncedSource.asObservable();
-  // missionConfirmed$ = this.missionConfirmedSource.asObservable();
   playerJoined$ = this.playerJoinedSource.asObservable();
   playerLeft$ = this.playerLeftSource.asObservable();
   playerReady$ = this.playerReadySource.asObservable();
@@ -28,6 +25,8 @@ export class InterCommService {
   questionSubmited$ = this.questionSubmitedSource.asObservable();
   answerSubmited$ = this.answerSubmitedSource.asObservable();
   scoreAdded$ = this.scoreAddedSource.asObservable();
+
+  internalSubmitQuestion$ = this.internalSubmitQuestionSource.asObservable();
 
   // Service message commands
   // announceMission(mission: string) {
@@ -57,6 +56,10 @@ export class InterCommService {
     this.answerSubmitedSource.next(message);
   }
   handleScoreAdded(message: string) {
-    this.scoreAddedSource.asObservable();
+    this.scoreAddedSource.next(message);
+  }
+  
+  handleInternalSubmitQuestion(message: string) {
+    this.internalSubmitQuestionSource.next(message);
   }
 }

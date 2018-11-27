@@ -33,9 +33,9 @@ export class AppComponent {
       answer => this.sayAnswerSubmited(answer)
     );
 
-    interCommService.questionSubmited$.subscribe(
+    interCommService.internalSubmitQuestion$.subscribe(
       question => {
-        console.log('[INFO] submitQuestion is hited in: ' + this);
+        // console.log('[INFO] submitQuestion is hited in: ' + this);
         this.sayQuestionSubmited(JSON.parse(question));
       }
     );
@@ -56,8 +56,9 @@ export class AppComponent {
         });
         that.ws.subscribe('/topic/reply', function (message) {
           const parsedMessage = JSON.parse(message.body);
-          // console.log('NEW_MESSAGE_ARRIVED!!!');
-          // console.log(message);
+          console.log('[RECEIVED] at ' + new Date());
+          console.log(message);
+          console.log('-=- '.repeat(15));
           const messageType = parsedMessage.type;
           let user = parsedMessage.user;
           // console.log(messageType);
@@ -77,7 +78,7 @@ export class AppComponent {
                 // TODO: go to question view. else wait.
                 that.interCommService.handlePlayerSelected(message.body);
               }
-              
+
               break;
             case 'QUESTION_SUBMITED':
               // if (user = that.localPlayer) {
@@ -130,11 +131,14 @@ export class AppComponent {
     // });
 
     this.ws.send('/app/message', {}, data);
+    console.log('[SENT] at ' + new Date());
+    console.log(data);
+    console.log('-=- '.repeat(15));
   }
 
 
   sayPlayerJoined(user: string) {
-    if(this.isJoined){
+    if (this.isJoined) {
       return;
     }
     const message = JSON.stringify({
@@ -144,16 +148,22 @@ export class AppComponent {
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
+    console.log('[SENT] at ' + new Date());
+    console.log(message);
+    console.log('-=- '.repeat(15));
   }
 
   sayPlayerLeft(user: string) {
-    this.isJoined=false;
+    this.isJoined = false;
     const message = JSON.stringify({
       type: 'PLAYER_LEFT',
       user: this.localPlayer,
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
+    console.log('[SENT] at ' + new Date());
+    console.log(message);
+    console.log('-=- '.repeat(15));
   }
 
   sayPlayerReady() {
@@ -162,12 +172,15 @@ export class AppComponent {
       user: this.localPlayer,
       createdAt: new Date()
     });
-    console.log('I will say ' + message);
+    // console.log('I will say ' + message);
     this.ws.send('/app/message', {}, message);
+    console.log('[SENT] at ' + new Date());
+    console.log(message);
+    console.log('-=- '.repeat(15));
   }
 
   sayQuestionSubmited(question: Question) {
-    console.log('[INFO] sayQuestionSubmited is hited' + this);
+    // console.log('[INFO] sayQuestionSubmited is hited' + this);
     const message = JSON.stringify({
       type: 'QUESTION_SUBMITED',
       user: this.localPlayer,
@@ -175,8 +188,11 @@ export class AppComponent {
       options: question.options,
       createdAt: new Date()
     });
-    console.log('THIS IS THE FINAL FORM OF QUESTION TO SEND' + message);
+    // console.log('THIS IS THE FINAL FORM OF QUESTION TO SEND' + message);
     this.ws.send('/app/message', {}, message);
+    console.log('[SENT] at ' + new Date());
+    console.log(message);
+    console.log('-=- '.repeat(15));
   }
 
   sayAnswerSubmited(answer: string) {
@@ -187,6 +203,9 @@ export class AppComponent {
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
+    console.log('[SENT] at ' + new Date());
+    console.log(message);
+    console.log('-=- '.repeat(15));
   }
 
   showGreeting(message) {
