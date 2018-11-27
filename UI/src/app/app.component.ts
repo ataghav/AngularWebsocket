@@ -29,14 +29,14 @@ export class AppComponent {
   disabled: boolean;
 
   constructor(private interCommService: InterCommService) {
-    interCommService.answerSubmited$.subscribe(
-      answer => this.sayAnswerSubmited(answer)
+    interCommService.answerSubmitted$.subscribe(
+      answer => this.sayAnswerSubmitted(answer)
     );
 
     interCommService.internalSubmitQuestion$.subscribe(
       question => {
         // console.log('[INFO] submitQuestion is hited in: ' + this);
-        this.sayQuestionSubmited(JSON.parse(question));
+        this.sayQuestionSubmitted(JSON.parse(question));
       }
     );
   }
@@ -80,16 +80,16 @@ export class AppComponent {
               }
 
               break;
-            case 'QUESTION_SUBMITED':
+            case 'QUESTION_SUBMITTED':
               // if (user = that.localPlayer) {
               //   console.log('QUESTION IS MINE');
               //   break;
               // }
               // console.log('QUESTION IS NOT MINE');
-              that.interCommService.handleQuestionSubmited(message.body);
+              that.interCommService.handleQuestionSubmitted(message.body);
               break;
-            // case 'ANSWER_SUBMITED':
-            //   that.interCommService.handleAnswerSubmited(message.body);
+            // case 'ANSWER_SUBMITTED':
+            //   that.interCommService.handleAnswerSubmitted(message.body);
             //   break;
             case 'SCORE_ADDED':
               that.interCommService.handleScoreAdded(message.body);
@@ -179,10 +179,10 @@ export class AppComponent {
     console.log('-=- '.repeat(15));
   }
 
-  sayQuestionSubmited(question: Question) {
-    // console.log('[INFO] sayQuestionSubmited is hited' + this);
+  sayQuestionSubmitted(question: Question) {
+    // console.log('[INFO] sayQuestionSubmitted is hited' + this);
     const message = JSON.stringify({
-      type: 'QUESTION_SUBMITED',
+      type: 'QUESTION_SUBMITTED',
       user: this.localPlayer,
       text: question.text,
       options: question.options,
@@ -195,9 +195,9 @@ export class AppComponent {
     console.log('-=- '.repeat(15));
   }
 
-  sayAnswerSubmited(answer: string) {
+  sayAnswerSubmitted(answer: string) {
     const message = JSON.stringify({
-      type: 'ANSWER_SUBMITED',
+      type: 'ANSWER_SUBMITTED',
       user: this.localPlayer,
       answerIndex: answer,
       createdAt: new Date()

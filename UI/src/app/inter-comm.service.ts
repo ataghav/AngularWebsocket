@@ -11,8 +11,8 @@ export class InterCommService {
   private playerLeftSource = new Subject<string>();
   private playerReadySource = new Subject<string>();
   private playerSelectedSource = new Subject<string>();
-  private questionSubmitedSource = new Subject<string>();
-  private answerSubmitedSource = new Subject<string>();
+  private questionSubmittedSource = new Subject<string>();
+  private answerSubmittedSource = new Subject<string>();
   private scoreAddedSource = new Subject<string>();
 
   private internalSubmitQuestionSource = new Subject<string>();
@@ -22,8 +22,8 @@ export class InterCommService {
   playerLeft$ = this.playerLeftSource.asObservable();
   playerReady$ = this.playerReadySource.asObservable();
   playerSelected$ = this.playerSelectedSource.asObservable();
-  questionSubmited$ = this.questionSubmitedSource.asObservable();
-  answerSubmited$ = this.answerSubmitedSource.asObservable();
+  questionSubmitted$ = this.questionSubmittedSource.asObservable();
+  answerSubmitted$ = this.answerSubmittedSource.asObservable();
   scoreAdded$ = this.scoreAddedSource.asObservable();
 
   internalSubmitQuestion$ = this.internalSubmitQuestionSource.asObservable();
@@ -49,11 +49,11 @@ export class InterCommService {
   handlePlayerSelected(message: string) {
     this.playerSelectedSource.next(message);
   }
-  handleQuestionSubmited(message: string) {
-    this.questionSubmitedSource.next(message);
+  handleQuestionSubmitted(message: string) {
+    this.questionSubmittedSource.next(message);
   }
-  handleAnswerSubmited(message: string) {
-    this.answerSubmitedSource.next(message);
+  handleAnswerSubmitted(message: string) {
+    this.answerSubmittedSource.next(message);
   }
   handleScoreAdded(message: string) {
     this.scoreAddedSource.next(message);

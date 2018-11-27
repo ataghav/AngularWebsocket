@@ -29,7 +29,7 @@ export class AnswerComponent implements OnDestroy {
   };
 
   constructor(private interCommService: InterCommService) {
-    this.subscription = interCommService.questionSubmited$.subscribe(
+    this.subscription = interCommService.questionSubmitted$.subscribe(
       message => {
         const parsedMessage = JSON.parse(message);
         console.log(parsedMessage.options);
@@ -45,7 +45,7 @@ export class AnswerComponent implements OnDestroy {
   submitAnswer() {
     console.log('the selected value is:' + this.selectedOption);
 
-    this.interCommService.handleAnswerSubmited(String(this.selectedOption));
+    this.interCommService.handleAnswerSubmitted(String(this.selectedOption));
   }
 
   ngOnDestroy() {
