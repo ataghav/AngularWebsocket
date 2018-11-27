@@ -44,7 +44,7 @@ public class WebSocketController {
                 handlePlayerReady(sm);
                 break;
 
-            case QUESTION_SUBMITED:
+            case QUESTION_SUBMITTED:
                 handleQuestionSubmitted(sm);
                 break;
 
@@ -98,27 +98,12 @@ public class WebSocketController {
         }
         if (loggedInUsers.size() == readyUsersCount) {
             declareQuestioner();
-//            int counter = 0;
-//            int chosenIndex = 0;
-//            Boolean flagRemoving = false;
-//
-//            for (User user : loggedInUsers) {
-//                counter++;
-//                if (flagRemoving) {
-//                    user.setHasAskedFlag(false);
-//                }
-//                if (counter == chosenIndex) {
-//                    user.setHasAskedFlag(true);
-//                    declareQuestioner(user.getUserName());
-//                }
-//            }
         }
     }
 
     private void handleQuestionSubmitted(SocketMessage sm) {
     }
 
-//    @SendTo("/topic/reply")
     private void declareQuestioner() {
         int notAskedCount = 0;
         int chosenIndex;
