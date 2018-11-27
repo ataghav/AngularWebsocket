@@ -1,11 +1,14 @@
 package com.team.project.gameserver.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.team.project.gameserver.dtos.SocketMessage;
-import com.team.project.gameserver.models.User;
+import com.team.project.gameserver.models.*;
+import com.team.project.gameserver.repositories.GameRepository;
+import com.team.project.gameserver.repositories.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -23,14 +26,30 @@ public class WebSocketController {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
+    @Autowired
+    private GameRepository gameRepository;
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    private Long currentGameId;
+    private Long currentRoundId;
+    private Long currentQuestionId;
+
     private List<User> loggedInUsers = new ArrayList<>();
     private Boolean propagationPermit = true;
+
 
     @MessageMapping("/message")
     @SendTo("/topic/reply")
     public String processMessageFromClient(@Payload String message) throws Exception {
 //        String name = new Gson().fromJson(message, Map.class).get("name").toString();
 //        return name;
+        if (currentGameId == null) {
+            currentGameId = gameRepository.save(new Game() {{
+                setStartedAt(new Date());
+            }}).getId();
+        }
         SocketMessage sm = new Gson().fromJson(message, SocketMessage.class);
         switch (sm.getMessageType()) {
             case PLAYER_JOINED:
@@ -72,7 +91,7 @@ public class WebSocketController {
                 allAnswered = false;
             }
         }
-        if(allAnswered){
+        if (allAnswered) {
             // TODO: score players
             declareQuestioner();
         }
@@ -111,12 +130,32 @@ public class WebSocketController {
             }
         }
         if (loggedInUsers.size() == readyUsersCount) {
+            gameRepository.findById(currentGameId).get().getRounds().add(new Round(){{
+                setStartedAt(new Date());
+            }});
+//            gameRepository.
+
             declareQuestioner();
         }
     }
 
     private void handleQuestionSubmitted(SocketMessage sm) {
-        // TODO: register question
+        // TODO: register question:
+        Question question = new Question(){{
+            setText(sm.getText());
+        }};
+//        question.setText(sm.getText());
+        List<Option> lo = new ArrayList<>();
+        for (String s : sm.getOptions()) {
+            lo.add(new Option() {{
+                setQuestion(question);
+                setText(s);
+                setIsTrue(false);
+            }});
+        }
+        question.getOptions().get(sm.getAnswerIndex()).setIsTrue(true);
+        question.setOptions(lo);
+        currentQuestionId = questionRepository.save(question).getId();
     }
 
     private void declareQuestioner() {

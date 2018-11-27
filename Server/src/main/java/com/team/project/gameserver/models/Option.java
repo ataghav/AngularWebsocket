@@ -8,7 +8,7 @@ public class Option {
     @Id
     @GeneratedValue
     private Long id;
-    private Long questionId;
+//    private Long questionId;
     private String text;
     private Boolean isTrue;
 
@@ -24,13 +24,13 @@ public class Option {
         this.id = id;
     }
 
-    public Long getQuestionId() {
-        return questionId;
-    }
+//    public Long getQuestionId() {
+//        return questionId;
+//    }
 
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
+//    public void setQuestionId(Long questionId) {
+//        this.questionId = questionId;
+//    }
 
     public String getText() {
         return text;
@@ -40,11 +40,11 @@ public class Option {
         this.text = text;
     }
 
-    public Boolean getTrue() {
+    public Boolean getIsTrue() {
         return isTrue;
     }
 
-    public void setTrue(Boolean aTrue) {
+    public void setIsTrue(Boolean aTrue) {
         isTrue = aTrue;
     }
 
