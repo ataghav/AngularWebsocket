@@ -14,8 +14,8 @@ public class User {
     private String userName;
     private String passWord;
     private Boolean isReady;
-//    private Boolean isAskingQuestion;
     private Boolean hasAskedFlag;
+    private Boolean hasAnsweredFlag;
     private Integer score;
 
     public User() {
@@ -78,14 +78,6 @@ public class User {
         isReady = ready;
     }
 
-//    public Boolean getAskingQuestion() {
-//        return isAskingQuestion;
-//    }
-//
-//    public void setAskingQuestion(Boolean askingQuestion) {
-//        isAskingQuestion = askingQuestion;
-//    }
-
     public Boolean getHasAskedFlag() {
         return hasAskedFlag;
     }
@@ -93,6 +85,10 @@ public class User {
     public void setHasAskedFlag(Boolean hasAskedFlag) {
         this.hasAskedFlag = hasAskedFlag;
     }
+
+    public Boolean getHasAnsweredFlag() {return hasAnsweredFlag;}
+
+    public void setHasAnsweredFlag(Boolean hasAnsweredFlag) {this.hasAnsweredFlag = hasAnsweredFlag;}
 
     public Integer getScore() {
         return score;

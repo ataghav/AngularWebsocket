@@ -62,6 +62,20 @@ public class WebSocketController {
     }
 
     private void handleAnswerSubmitted(SocketMessage sm) {
+        Boolean allAnswered = true;
+        for (User user : loggedInUsers) {
+            if (user.getUserName().equals(sm.getUser())) {
+                user.setHasAnsweredFlag(true);
+                return;
+            }
+            if (!user.getHasAnsweredFlag()) {
+                allAnswered = false;
+            }
+        }
+        if(allAnswered){
+            // TODO: score players
+            declareQuestioner();
+        }
     }
 
     private void handlePlayerJoined(SocketMessage sm) {
@@ -102,6 +116,7 @@ public class WebSocketController {
     }
 
     private void handleQuestionSubmitted(SocketMessage sm) {
+        // TODO: register question
     }
 
     private void declareQuestioner() {
