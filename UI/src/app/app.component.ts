@@ -8,6 +8,7 @@ export interface Question {
   user: string;
   text: string;
   options: string[];
+  answerIndex: number;
   createdAt: Date;
 }
 @Component({
@@ -186,6 +187,7 @@ export class AppComponent {
       user: this.localPlayer,
       text: question.text,
       options: question.options,
+      answerIndex: question.answerIndex,
       createdAt: new Date()
     });
     // console.log('THIS IS THE FINAL FORM OF QUESTION TO SEND' + message);
