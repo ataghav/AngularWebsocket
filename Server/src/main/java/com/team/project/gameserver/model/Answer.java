@@ -1,4 +1,4 @@
-package com.team.project.gameserver.models;
+package com.team.project.gameserver.model;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,11 +11,13 @@ public class Answer {
     private Long userId;
     private Long questionId;
     private Long selectedOptionId;
-    private Date submitedAt;
+    private Date submittedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_question")
     private Question question;
+
+    public Answer(){}
 
     public Long getId() {
         return id;
@@ -49,12 +51,12 @@ public class Answer {
         this.selectedOptionId = selectedOptionId;
     }
 
-    public Date getSubmitedAt() {
-        return submitedAt;
+    public Date getSubmittedAt() {
+        return submittedAt;
     }
 
-    public void setSubmitedAt(Date submitedAt) {
-        this.submitedAt = submitedAt;
+    public void setSubmittedAt(Date submittedAt) {
+        this.submittedAt = submittedAt;
     }
 
     public Question getQuestion() {

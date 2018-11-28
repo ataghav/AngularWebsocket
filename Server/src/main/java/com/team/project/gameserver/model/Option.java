@@ -1,7 +1,6 @@
-package com.team.project.gameserver.models;
+package com.team.project.gameserver.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Option {

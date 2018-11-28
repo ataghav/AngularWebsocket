@@ -1,4 +1,4 @@
-package com.team.project.gameserver.services;
+package com.team.project.gameserver.service;
 
 import org.springframework.stereotype.Service;
 

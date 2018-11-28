@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.team.project.gameserver.dtos.SocketMessage;
-import com.team.project.gameserver.models.*;
-import com.team.project.gameserver.repositories.GameRepository;
-import com.team.project.gameserver.repositories.QuestionRepository;
+import com.team.project.gameserver.model.*;
+import com.team.project.gameserver.repository.OptionRepository;
+import com.team.project.gameserver.repository.QuestionRepository;
+import com.team.project.gameserver.service.GameService;
+import com.team.project.gameserver.service.OptionService;
+import com.team.project.gameserver.service.QuestionService;
+import com.team.project.gameserver.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -27,10 +31,16 @@ public class WebSocketController {
     private SimpMessageSendingOperations messagingTemplate;
 
     @Autowired
-    private GameRepository gameRepository;
+    private GameService gameService;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private RoundService roundService;
+
+    @Autowired
+    private QuestionService questionService;
+
+    @Autowired
+    private OptionService optionService;
 
     private Long currentGameId;
     private Long currentRoundId;
@@ -46,10 +56,11 @@ public class WebSocketController {
 //        String name = new Gson().fromJson(message, Map.class).get("name").toString();
 //        return name;
         if (currentGameId == null) {
-            currentGameId = gameRepository.save(new Game() {{
-                setStartedAt(new Date());
-            }}).getId();
+            Game g = new Game();
+            g.setStartedAt(new Date());
+            currentGameId = gameService.save(g).getId();
         }
+
         SocketMessage sm = new Gson().fromJson(message, SocketMessage.class);
         switch (sm.getMessageType()) {
             case PLAYER_JOINED:
@@ -83,15 +94,17 @@ public class WebSocketController {
     private void handleAnswerSubmitted(SocketMessage sm) {
         Boolean allAnswered = true;
         for (User user : loggedInUsers) {
-            if (user.getUserName().equals(sm.getUser())) {
+            if (user.getUsername().equals(sm.getUser())) {
                 user.setHasAnsweredFlag(true);
-                return;
             }
             if (!user.getHasAnsweredFlag()) {
                 allAnswered = false;
             }
         }
         if (allAnswered) {
+            for (User user : loggedInUsers) {
+                user.setHasAnsweredFlag(false);
+            }
             // TODO: score players
             declareQuestioner();
         }
@@ -99,18 +112,23 @@ public class WebSocketController {
 
     private void handlePlayerJoined(SocketMessage sm) {
         for (User user : loggedInUsers) {
-            if (user.getUserName().equals(sm.getUser())) {
+            if (user.getUsername().equals(sm.getUser())) {
                 propagationPermit = false;
                 return;
             }
         }
-        loggedInUsers.add(new User(sm.getUser()));
+        User u = new User();
+        u.setUsername(sm.getUser());
+        u.setReady(false);
+        u.setHasAskedFlag(false);
+        u.setHasAnsweredFlag(false);
+        loggedInUsers.add(u);
     }
 
     private void handlePlayerLeft(SocketMessage sm) {
         propagationPermit = false;
         for (User user : loggedInUsers) {
-            if (user.getUserName().equals(sm.getUser())) {
+            if (user.getUsername().equals(sm.getUser())) {
                 loggedInUsers.remove(user);
                 propagationPermit = true;
             }
@@ -122,7 +140,7 @@ public class WebSocketController {
         int readyUsersCount = 0;
 
         for (User user : loggedInUsers) {
-            if (user.getUserName().equals(sm.getUser())) {
+            if (user.getUsername().equals(sm.getUser())) {
                 user.setReady(true);
             }
             if (user.getReady()) {
@@ -130,10 +148,10 @@ public class WebSocketController {
             }
         }
         if (loggedInUsers.size() == readyUsersCount) {
-            gameRepository.findById(currentGameId).get().getRounds().add(new Round(){{
-                setStartedAt(new Date());
-            }});
-//            gameRepository.
+            Round r = new Round();
+            r.setStartedAt(new Date());
+            r.setGame(gameService.findById(currentGameId));
+            currentRoundId = roundService.save(r).getId();
 
             declareQuestioner();
         }
@@ -141,21 +159,25 @@ public class WebSocketController {
 
     private void handleQuestionSubmitted(SocketMessage sm) {
         // TODO: register question:
-        Question question = new Question(){{
-            setText(sm.getText());
-        }};
-//        question.setText(sm.getText());
-        List<Option> lo = new ArrayList<>();
+
+        Question q = new Question();
+        q.setText(sm.getText());
+        currentQuestionId = questionService.save(q).getId();
+
+        int i = 0;
+
         for (String s : sm.getOptions()) {
-            lo.add(new Option() {{
-                setQuestion(question);
-                setText(s);
-                setIsTrue(false);
-            }});
+            Option o = new Option();
+            o.setQuestion(q);
+            o.setText(s);
+            if (sm.getAnswerIndex() == i) {
+                o.setIsTrue(true);
+            }
+
+            optionService.save(o);
+
+            i++;
         }
-        question.getOptions().get(sm.getAnswerIndex()).setIsTrue(true);
-        question.setOptions(lo);
-        currentQuestionId = questionRepository.save(question).getId();
     }
 
     private void declareQuestioner() {
@@ -182,12 +204,19 @@ public class WebSocketController {
         // Choose one among the players who has not asked their question in current round yet :
         chosenIndex = ThreadLocalRandom.current().nextInt(0, notAskedCount);
 
+        System.out.println("[INFO] Selected index is:" + chosenIndex);
+
         for (User user : loggedInUsers) {
-            if (i == chosenIndex) {
-                user.setHasAskedFlag(true);
-                chosenUsername = user.getUserName();
+            if(!user.getHasAskedFlag()){
+                if (i == chosenIndex) {
+                    user.setHasAskedFlag(true);
+
+                    // a user will not answer his question, so it flaged up here
+                    user.setHasAnsweredFlag(true);
+                    chosenUsername = user.getUsername();
+                }
+                i++;
             }
-            i++;
         }
 //        return  Gson().toJson(SocketMessage.playerSelectedMessage(chosenUsername));
         messagingTemplate.convertAndSend("/topic/reply", new Gson().toJson(SocketMessage.playerSelectedMessage(chosenUsername)));
