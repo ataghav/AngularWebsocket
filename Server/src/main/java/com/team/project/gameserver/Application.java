@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
 //@EnableAutoConfiguration
-@EntityScan( basePackages = {"com.team.project.gameserver.model"} )
+@EntityScan( basePackages = {"com.team.project.gameserver.models"} )
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class);

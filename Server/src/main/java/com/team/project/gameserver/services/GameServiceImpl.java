@@ -1,7 +1,7 @@
-package com.team.project.gameserver.service;
+package com.team.project.gameserver.services;
 
-import com.team.project.gameserver.model.Game;
-import com.team.project.gameserver.repository.GameRepository;
+import com.team.project.gameserver.models.Game;
+import com.team.project.gameserver.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

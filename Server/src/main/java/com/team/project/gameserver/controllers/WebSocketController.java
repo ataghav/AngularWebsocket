@@ -6,13 +6,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.team.project.gameserver.dtos.SocketMessage;
-import com.team.project.gameserver.model.*;
-import com.team.project.gameserver.repository.OptionRepository;
-import com.team.project.gameserver.repository.QuestionRepository;
-import com.team.project.gameserver.service.GameService;
-import com.team.project.gameserver.service.OptionService;
-import com.team.project.gameserver.service.QuestionService;
-import com.team.project.gameserver.service.RoundService;
+import com.team.project.gameserver.models.*;
+import com.team.project.gameserver.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -31,6 +26,9 @@ public class WebSocketController {
     private SimpMessageSendingOperations messagingTemplate;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private GameService gameService;
 
     @Autowired
@@ -41,6 +39,9 @@ public class WebSocketController {
 
     @Autowired
     private OptionService optionService;
+
+    @Autowired
+    private AnswerService answerService;
 
     private Long currentGameId;
     private Long currentRoundId;
@@ -92,6 +93,13 @@ public class WebSocketController {
     }
 
     private void handleAnswerSubmitted(SocketMessage sm) {
+        Answer a = new Answer();
+        a.setUser(userService.findById(Long.parseLong(sm.getUser())));
+        a.setQuestion(questionService.findById(currentQuestionId));
+        a.setSelectedOptionIndex(sm.getAnswerIndex());
+        a.setSubmittedAt(new Date());
+        answerService.save(a);
+
         Boolean allAnswered = true;
         for (User user : loggedInUsers) {
             if (user.getUsername().equals(sm.getUser())) {
@@ -136,7 +144,7 @@ public class WebSocketController {
     }
 
     private void handlePlayerReady(SocketMessage sm) {
-//        TODO: check weather all the logged in users are ready or not, if so, select questioner and declare her
+        // check weather all the logged in users are ready or not, if so, select questioner and declare her
         int readyUsersCount = 0;
 
         for (User user : loggedInUsers) {
@@ -158,8 +166,6 @@ public class WebSocketController {
     }
 
     private void handleQuestionSubmitted(SocketMessage sm) {
-        // TODO: register question:
-
         Question q = new Question();
         q.setText(sm.getText());
         currentQuestionId = questionService.save(q).getId();
@@ -199,6 +205,7 @@ public class WebSocketController {
             for (User user : loggedInUsers) {
                 user.setHasAskedFlag(false);
             }
+            // TODO: Renew round
         }
 
         // Choose one among the players who has not asked their question in current round yet :
@@ -207,7 +214,7 @@ public class WebSocketController {
         System.out.println("[INFO] Selected index is:" + chosenIndex);
 
         for (User user : loggedInUsers) {
-            if(!user.getHasAskedFlag()){
+            if (!user.getHasAskedFlag()) {
                 if (i == chosenIndex) {
                     user.setHasAskedFlag(true);
 

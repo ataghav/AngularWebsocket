@@ -1,7 +1,7 @@
-package com.team.project.gameserver.service;
+package com.team.project.gameserver.services;
 
-import com.team.project.gameserver.model.Round;
-import com.team.project.gameserver.repository.RoundRepository;
+import com.team.project.gameserver.models.Round;
+import com.team.project.gameserver.repositories.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

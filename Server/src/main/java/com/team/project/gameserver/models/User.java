@@ -1,8 +1,10 @@
-package com.team.project.gameserver.model;
+package com.team.project.gameserver.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class User {
@@ -18,17 +20,8 @@ public class User {
     private Boolean hasAnsweredFlag;
     private Integer score;
 
-//    public User() {
-//        this.isReady = false;
-//        this.hasAskedFlag = false;
-//    }
-
-//    public User(String userName) {
-//        this.userName = userName;
-//        this.isReady = false;
-//        this.hasAskedFlag = false;
-//    }
-
+    @OneToMany(mappedBy = "user")
+    private List<Answer> answers;
 
     public Long getId() {
         return id;
@@ -96,5 +89,13 @@ public class User {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 }

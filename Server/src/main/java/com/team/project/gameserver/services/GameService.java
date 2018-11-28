@@ -1,6 +1,6 @@
-package com.team.project.gameserver.service;
+package com.team.project.gameserver.services;
 
-import com.team.project.gameserver.model.Game;
+import com.team.project.gameserver.models.Game;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface GameService {

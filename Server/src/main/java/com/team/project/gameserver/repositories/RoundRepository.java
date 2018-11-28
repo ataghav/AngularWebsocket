@@ -1,6 +1,6 @@
-package com.team.project.gameserver.repository;
+package com.team.project.gameserver.repositories;
 
-import com.team.project.gameserver.model.Round;
+import com.team.project.gameserver.models.Round;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

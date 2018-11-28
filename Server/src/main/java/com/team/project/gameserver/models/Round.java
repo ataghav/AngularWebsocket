@@ -1,4 +1,4 @@
-package com.team.project.gameserver.model;
+package com.team.project.gameserver.models;
 
 import javax.persistence.*;
 import java.util.ArrayList;

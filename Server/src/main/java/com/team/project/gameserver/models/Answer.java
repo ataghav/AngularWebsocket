@@ -1,4 +1,4 @@
-package com.team.project.gameserver.model;
+package com.team.project.gameserver.models;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,14 +8,16 @@ public class Answer {
     @Id
     @GeneratedValue
     private Long id;
-    private Long userId;
-    private Long questionId;
-    private Long selectedOptionId;
+    private Integer selectedOptionIndex;
     private Date submittedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_question")
     private Question question;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_user")
+    private User user;
 
     public Answer(){}
 
@@ -27,28 +29,12 @@ public class Answer {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Integer getSelectedOptionIndex() {
+        return selectedOptionIndex;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-
-    public Long getSelectedOptionId() {
-        return selectedOptionId;
-    }
-
-    public void setSelectedOptionId(Long selectedOptionId) {
-        this.selectedOptionId = selectedOptionId;
+    public void setSelectedOptionIndex(Integer selectedOptionIndex) {
+        this.selectedOptionIndex = selectedOptionIndex;
     }
 
     public Date getSubmittedAt() {
@@ -65,5 +51,13 @@ public class Answer {
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

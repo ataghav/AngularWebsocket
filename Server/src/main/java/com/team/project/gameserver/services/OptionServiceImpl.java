@@ -1,7 +1,7 @@
-package com.team.project.gameserver.service;
+package com.team.project.gameserver.services;
 
-import com.team.project.gameserver.model.Option;
-import com.team.project.gameserver.repository.OptionRepository;
+import com.team.project.gameserver.models.Option;
+import com.team.project.gameserver.repositories.OptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
