@@ -1,5 +1,5 @@
-<ul class="list-group" *ngFor="let player of players">
-  <li class="list-group-item">
+<ul class="list-group" >
+  <li class="list-group-item" *ngFor="let player of players">
     <span class="icon" *ngIf="player.isReady" class="glyphicon glyphicon-star"></span>
     <span class="icon" *ngIf="!player.isReady" class="glyphicon glyphicon-star-empty"></span>
     <span class="icon" class="glyphicon glyphicon-user "></span>

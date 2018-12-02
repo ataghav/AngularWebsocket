@@ -1,29 +1,36 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Start Bootstrap</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
+  <div class="container">
+    <a class="navbar-brand" href="#">Awesome Game</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <!-- <li class="nav-item active">
             <a class="nav-link" href="#">Home
               <span class="sr-only">(current)</span>
             </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
+          </li> -->
+        <li class="nav-item">
+          <form class="form-inline">
+            <div class="form-group">
+              <label class="text-light" for="connect">WebSocket connection:</label>
+              <button id="connect" class="btn btn-default" type="button" [disabled]="disabled" (click)="connect()">Connect</button>
+              <button id="disconnect" class="btn btn-default" type="button" [disabled]="!disabled" (click)="disconnect()">Disconnect</button>
+            </div>
+          </form>
+        </li>
+        <!-- <li class="nav-item">
             <a class="nav-link" href="#">Services</a>
-          </li>
-          <li class="nav-item">
+          </li> -->
+        <!-- <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
-          </li>
-        </ul>
-      </div>
+          </li> -->
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
 
 <!-- <app-nav></app-nav> -->
 
@@ -35,21 +42,10 @@
   <li><a routerLink="/question" class="logo">question</a></li>
 </ul> -->
 
-<app-player [newplayer]="newplayer"></app-player>
-
 
 <div id="main-content" class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <form class="form-inline">
-        <div class="form-group">
-          <label for="connect">WebSocket connection:</label>
-          <button id="connect" class="btn btn-default" type="button" [disabled]="disabled" (click)="connect()">Connect</button>
-          <button id="disconnect" class="btn btn-default" type="button" [disabled]="!disabled" (click)="disconnect()">Disconnect
-          </button>
-        </div>
-      </form>
-    </div>
+  <!-- <div class="row">
+
     <div class="col-md-6">
       <form class="form-inline" name="test-form">
         <div class="form-group">
@@ -57,25 +53,21 @@
           <input type="text" id="name" name="name" class="form-control" placeholder="Your name here..." [(ngModel)]="name">
         </div>
         <button id="send" class="btn btn-default" type="button" (click)="sendName()">Send</button>
-      </form>
+      </form> 
     </div>
+  </div> -->
+
+  <div class="" *ngIf=" generalStatus == 0">
+    <app-login></app-login>
   </div>
-  <div class="row">
-    
-  </div>
-  <div class="row">
-    <button id="1" class="btn btn-success" type="button" (click)="sayPlayerJoined()">Player Joined</button>
-    <button id="2" class="btn btn-success" type="button" (click)="sayPlayerLeft()">Player Left</button>
-    <button id="3" class="btn btn-success" type="button" (click)="sayPlayerReady()">Player Ready</button>
-    <button id="4" class="btn btn-success" type="button" (click)="sayQuestionSubmitted()">Question Submitted</button>
-    <button id="5" class="btn btn-success" type="button" (click)="sayAnswerSubmitted()">Answer Submitted</button>
-    
-  </div>
-  <div class="row">
+
+
+
+  <!-- <div class="row">
     <input type="text" class="form-control" placeholder="Username" [(ngModel)]="localPlayer">
-  </div>
+  </div> -->
   <hr>
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-md-12" *ngIf="showConversation">
       <table id="conversation" class="table table-striped">
         <thead>
@@ -89,7 +81,59 @@
       </table>
       
     </div>
+  </div> -->
+
+  <!-- END OF OLD CODE -->
+
+
+  <div class="row" *ngIf=" generalStatus == 1 ||  generalStatus == 2 ||  generalStatus == 3 ||  generalStatus == 4 ||  generalStatus == 5">
+    <div class="col-xs-8">
+
+      <!-- Status: CONNECTED -->
+      <div class="row" *ngIf="generalStatus == 1">
+        <div class="row justify-content-center">
+          <h1>Welcome to Awesome Game</h1>
+        </div>
+        
+        <div class="row justify-content-center">
+
+          <button id="1" class="btn " type="button" (click)="sayPlayerJoined()">Join</button>
+          <button id="2" class="btn " type="button" (click)="sayPlayerLeft()">Leave</button>
+          
+          <!-- <button id="4" class="btn btn-success" type="button" (click)="sayQuestionSubmitted()">Question Submitted</button>
+            <button id="5" class="btn btn-success" type="button" (click)="sayAnswerSubmitted()">Answer Submitted</button> -->
+        </div>
+      </div>
+
+
+      <div class="row" *ngIf="generalStatus == 2">
+        <button id="3" class="btn btn btn-primary" type="button" (click)="sayPlayerReady()">Start Game</button>
+      </div>
+
+      <!-- Status: JOINED -->
+      <div class="row" *ngIf=" generalStatus == 4">
+        <app-question></app-question>
+      </div>
+
+      <!-- Status: CONNECTED -->
+      <div class="row" *ngIf=" generalStatus == 5">
+        <app-answer></app-answer>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <app-players></app-players>
+    </div>
   </div>
+
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div>
+      <p class="m-0 text-center text-white">Copyright &copy; Advanced Java Class Nov 2018</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
 
 </div>
 
@@ -98,4 +142,3 @@
 <section>
   <router-outlet></router-outlet>
 </section>
-

@@ -2,12 +2,6 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { InterCommService } from '../inter-comm.service';
 import { Subscription } from 'rxjs';
 
-// export interface DraftOption {
-//   text: string;
-//   index: number;
-//   isCorrect: boolean;
-// }
-
 export interface DraftQuestion {
   text: string;
   options: string[];
@@ -23,19 +17,19 @@ export interface DraftQuestion {
 export class QuestionComponent implements OnDestroy {
   subscription: Subscription;
 
-  constructor(private interCommService: InterCommService) { 
+  constructor(private interCommService: InterCommService) {
     this.subscription = interCommService.playerSelected$.subscribe(
       message => {
         const parsedMessage = JSON.parse(message);
         // console.log(parsedMessage.options);
-        this.myQuestion.text='TADA!!!';
+        // this.myQuestion.text = 'TADA!!!';
       });
   }
 
   myQuestion: DraftQuestion = {
-    text: 'my text',
-    options: ['opt1', 'opt2'],
-    answerIndex: '1'
+    text: '',
+    options: [''],
+    answerIndex: null
   };
 
   addNewOption() {
@@ -51,7 +45,7 @@ export class QuestionComponent implements OnDestroy {
   removeOption($event) {
     // this.optionsCounter--;
     console.log((<HTMLSpanElement>event.target).id);
-    this.myQuestion.options.splice(Number((<HTMLSpanElement>event.target).id),1);
+    this.myQuestion.options.splice(Number((<HTMLSpanElement>event.target).id), 1);
     // TODO: remove selected option
     // TODO: reindex remaining options
   }
@@ -60,6 +54,12 @@ export class QuestionComponent implements OnDestroy {
     console.log('SELECTION HAS CHANGED ');
     this.myQuestion.answerIndex = (<HTMLInputElement>event.target).value;
 
+  }
+
+  clearForm() {
+    this.myQuestion.text = '';
+    this.myQuestion.options = [''];
+    this.myQuestion.answerIndex = null;
   }
 
   submitQuestion() {

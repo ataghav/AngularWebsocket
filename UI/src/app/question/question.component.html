@@ -1,17 +1,34 @@
 <div class="form-group">
     <label for="question-text">Ask a question:</label>
-    <textarea name="" id="question-text" cols="30" rows="2" [(ngModel)]="myQuestion.text"></textarea>
+    <textarea class="form-control" id="question-text" cols="50" rows="2" [(ngModel)]="myQuestion.text" placeholder="Your question..."></textarea>
 </div>
-<button type="button" class="btn btn-icon" (click)="addNewOption()"><span class="glyphicon glyphicon-plus"></span></button>
-<div class="form-group" *ngFor="let option of myQuestion.options; let i = index; trackBy:trackByFn;">
+<button type="button" class="btn" (click)="addNewOption()">Add </button>
+<div class="form-group " *ngFor="let option of myQuestion.options; let i = index; trackBy:trackByFn;">
     <div class="radio">
         <input type="radio" name="optradio" (change)="selectionChanged($event)" [value]="i">
-        <input type="text" [(ngModel)]="myQuestion.options[i]" required>
+        <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="myQuestion.options[i]" required placeholder="An optionanl answer...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" (click)="removeOption($event)" [id]="i">remove</button>
+            </span>
+        </div>
+        <!-- <input type="text" class="form-control d-inline-block" [(ngModel)]="myQuestion.options[i]" required placeholder="An optionanl answer...">
         <button type="button" class="btn btn-icon" (click)="removeOption($event)">
             <span class="glyphicon glyphicon-trash" [id]="i"></span>
-        </button>
+        </button> -->
     </div>
 </div>
 
-<br/>
-<button type="button" class="btn btn-primary" (click)="submitQuestion()">Submit</button>
+<!-- <div class="input-group">
+    <input type="text" class="form-control">
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button">remove</button>
+    </span>
+</div> -->
+
+<br />
+<div class="row  justify-content-center">
+    <button type="button" class="btn margin-10" (click)="clearForm()">Clear</button>
+    <button type="button" class="btn btn-primary" (click)="submitQuestion()">Submit</button>
+    <br> 
+</div>

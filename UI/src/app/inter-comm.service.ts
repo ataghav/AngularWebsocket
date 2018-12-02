@@ -15,6 +15,7 @@ export class InterCommService {
   private answerSubmittedSource = new Subject<string>();
   private scoreAddedSource = new Subject<string>();
 
+  private internalPlayerLoginSource = new Subject<string>();
   private internalSubmitQuestionSource = new Subject<string>();
 
   // Observable string streams
@@ -26,6 +27,7 @@ export class InterCommService {
   answerSubmitted$ = this.answerSubmittedSource.asObservable();
   scoreAdded$ = this.scoreAddedSource.asObservable();
 
+  internalPlayerLogin$ = this.internalPlayerLoginSource.asObservable();
   internalSubmitQuestion$ = this.internalSubmitQuestionSource.asObservable();
 
   // Service message commands
@@ -58,7 +60,10 @@ export class InterCommService {
   handleScoreAdded(message: string) {
     this.scoreAddedSource.next(message);
   }
-  
+
+  handleInternalPlayerLogin(message: string) {
+    this.internalPlayerLoginSource.next(message);
+  }
   handleInternalSubmitQuestion(message: string) {
     this.internalSubmitQuestionSource.next(message);
   }

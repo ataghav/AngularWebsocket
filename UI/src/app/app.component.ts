@@ -11,15 +11,27 @@ export interface Question {
   answerIndex: number;
   createdAt: Date;
 }
+
+enum SystemStates {
+  LoggedOut,
+  Connected,
+  Joined,
+  Started,
+  Questioning,
+  Answering
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'game';
+  // title = 'game';
   localPlayer: string;
   isJoined: boolean = false;
+  gstat = false;
+  generalStatus: SystemStates = SystemStates.LoggedOut;
 
   history: string[] = [];
 
@@ -30,6 +42,14 @@ export class AppComponent {
   disabled: boolean;
 
   constructor(private interCommService: InterCommService) {
+    interCommService.internalPlayerLogin$.subscribe(
+      player => {
+        this.localPlayer = player;
+        this.connect();
+        this.generalStatus = SystemStates.Connected;
+        console.log('PLAYER NAME DETERMINED!!!');
+      });
+
     interCommService.answerSubmitted$.subscribe(
       answer => this.sayAnswerSubmitted(answer)
     );
@@ -40,6 +60,13 @@ export class AppComponent {
         this.sayQuestionSubmitted(JSON.parse(question));
       }
     );
+
+    // showLogin
+    // showStart
+    // showWait
+    // showQuestion
+    // showAnswer
+    // --showScores
   }
 
   connect() {
@@ -57,38 +84,44 @@ export class AppComponent {
         });
         that.ws.subscribe('/topic/reply', function (message) {
           const parsedMessage = JSON.parse(message.body);
-          console.log('[RECEIVED] at ' + new Date());
-          console.log(message);
-          console.log('-=- '.repeat(15));
+          that.logState('RECEIVED', message);
           const messageType = parsedMessage.type;
-          let user = parsedMessage.user;
+          const user = parsedMessage.user;
           // console.log(messageType);
           switch (messageType) {
             case 'PLAYER_JOINED':
+              //
               that.interCommService.handlePlayerJoined(message.body);
               break;
+
             case 'PLAYER_LEFT':
               that.interCommService.handlePlayerLeft(message.body);
               break;
+
             case 'PLAYER_READY':
+              // if I am ready
               that.interCommService.handlePlayerReady(message.body);
               break;
+
             case 'PLAYER_SELECTED':
               // console.log('PLAYER_SELECTED has been received');
-              if (user == that.localPlayer) {
+              if (user === that.localPlayer) {
                 // TODO: go to question view. else wait.
+                that.generalStatus = SystemStates.Questioning;
                 that.interCommService.handlePlayerSelected(message.body);
               }
-
               break;
+
             case 'QUESTION_SUBMITTED':
               // if (user = that.localPlayer) {
               //   console.log('QUESTION IS MINE');
               //   break;
               // }
               // console.log('QUESTION IS NOT MINE');
+              that.generalStatus = SystemStates.Answering;
               that.interCommService.handleQuestionSubmitted(message.body);
               break;
+
             // case 'ANSWER_SUBMITTED':
             //   that.interCommService.handleAnswerSubmitted(message.body);
             //   break;
@@ -132,9 +165,7 @@ export class AppComponent {
     // });
 
     this.ws.send('/app/message', {}, data);
-    console.log('[SENT] at ' + new Date());
-    console.log(data);
-    console.log('-=- '.repeat(15));
+    this.logState('SENT', data);
   }
 
 
@@ -142,6 +173,7 @@ export class AppComponent {
     if (this.isJoined) {
       return;
     }
+    this.generalStatus = SystemStates.Joined;
     const message = JSON.stringify({
       type: 'PLAYER_JOINED',
       // user: 'user' + Math.floor(Math.random()*10) + 1,
@@ -149,9 +181,7 @@ export class AppComponent {
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
-    console.log('[SENT] at ' + new Date());
-    console.log(message);
-    console.log('-=- '.repeat(15));
+    this.logState('SENT', message);
   }
 
   sayPlayerLeft(user: string) {
@@ -162,9 +192,7 @@ export class AppComponent {
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
-    console.log('[SENT] at ' + new Date());
-    console.log(message);
-    console.log('-=- '.repeat(15));
+    this.logState('SENT', message);
   }
 
   sayPlayerReady() {
@@ -175,9 +203,7 @@ export class AppComponent {
     });
     // console.log('I will say ' + message);
     this.ws.send('/app/message', {}, message);
-    console.log('[SENT] at ' + new Date());
-    console.log(message);
-    console.log('-=- '.repeat(15));
+    this.logState('SENT', message);
   }
 
   sayQuestionSubmitted(question: Question) {
@@ -192,9 +218,7 @@ export class AppComponent {
     });
     // console.log('THIS IS THE FINAL FORM OF QUESTION TO SEND' + message);
     this.ws.send('/app/message', {}, message);
-    console.log('[SENT] at ' + new Date());
-    console.log(message);
-    console.log('-=- '.repeat(15));
+    this.logState('SENT', message);
   }
 
   sayAnswerSubmitted(answer: string) {
@@ -205,9 +229,8 @@ export class AppComponent {
       createdAt: new Date()
     });
     this.ws.send('/app/message', {}, message);
-    console.log('[SENT] at ' + new Date());
-    console.log(message);
-    console.log('-=- '.repeat(15));
+    this.logState('SENT', message);
+
   }
 
   showGreeting(message) {
@@ -219,5 +242,11 @@ export class AppComponent {
     this.disabled = connected;
     this.showConversation = connected;
     this.greetings = [];
+  }
+
+  logState(cat: String, message) {
+    console.log('[' + cat + '] at ' + new Date());
+    console.log(message);
+    console.log('-=- '.repeat(15));
   }
 }
